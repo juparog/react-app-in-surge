@@ -1,0 +1,25 @@
+name: Deploy My App in Surge 
+
+on:
+  push:
+    branches:
+      - main 
+jobs:
+  build:                           
+    runs-on: ubuntu-latest 
+    name: Deploying to surge 
+    steps:    
+    - uses: actions/checkout@v2 
+    - name: Install Node.js
+      uses: actions/setup-node@v2-beta
+      with: 
+        node-version: 19
+    - uses: borales/actions-yarn@v4 # `yarn install`
+      with:
+        cmd: install 
+    - name: Build React App                              
+      run: yarn build 
+    - name: Install Surge
+      run: npm install --global surge  
+    - name: Run surge
+      run: surge ./build frequent-scarf.surge.sh --token ${{ secrets.SURGE_TOKEN }}
